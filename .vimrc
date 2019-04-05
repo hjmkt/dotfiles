@@ -32,12 +32,12 @@ nnoremap ss :<C-u>sp<CR>
 nnoremap sv :<C-u>vs<CR>
 nnoremap nt :<C-u>NERDTree<CR>
 
-inoremap { {}<Left>
-inoremap {<Enter> {}<Left><CR><ESC><S-o>
-inoremap ( ()<ESC>i
-inoremap (<Enter> ()<Left><CR><ESC><S-o>
-inoremap [ []<ESC>i
-inoremap [<Enter> []<Left><CR><ESC><S-o>
+"inoremap { {}<Left>
+"inoremap {<Enter> {}<Left><CR><ESC><S-o>
+"inoremap ( ()<ESC>i
+"inoremap (<Enter> ()<Left><CR><ESC><S-o>
+"inoremap [ []<ESC>i
+"inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap <silent> jj <ESC>
 
 let g:python_highlight_all = 1
@@ -51,7 +51,14 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'valloric/youcompleteme'
+"Plugin 'valloric/youcompleteme'
+Plugin 'Shougo/deoplete.nvim'
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:deoplete#enable_at_startup = 1
+Plugin 'roxma/nvim-yarp'
+Plugin 'roxma/vim-hug-neovim-rpc'
+Plugin 'Shougo/neosnippet.vim'
+Plugin 'Shougo/neosnippet-snippets'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'alvan/vim-closetag'
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
@@ -75,8 +82,19 @@ let g:syntastic_mode_map = { 'mode': 'passive',
                             \ 'active_filetypes': [],
                             \ 'passive_filetypes': ['python', 'html', 'javascript'] }
 "let g:syntastic_python_checkers = ['flake8', 'pylint', 'pep8', 'pycodestyle', 'pyflakes', 'python']
+let g:syntastic_htmldjango_checkers = ['python/pylint']
+let g:syntastic_html_checkers = ['jslint']
+let g:syntastic_javascript_checkers = ['eslint']
 
 Plugin 'scrooloose/nerdtree'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Shougo/context_filetype.vim'
+Plugin 'osyo-manga/vim-precious'
+Plugin 'honza/vim-snippets'
+let g:neosnippet#snippets_directory = '/home/hjmkt/.vim/bundle/vim-snippets/snippets'
+
+Plugin 'cohama/lexima.vim'
+Plugin 'skwp/greplace.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -113,12 +131,11 @@ augroup END
 
 au FileType vim set tabstop=2|set shiftwidth=2|set expandtab
 au FileType zsh set tabstop=2|set shiftwidth=2|set expandtab
-au FileType css set tabstop=2|set shiftwidth=2|set expandtab
-au FileType javascript set tabstop=2|set shiftwidth=2|set expandtab
-au FileType json set tabstop=2|set shiftwidth=2|set expandtab
 au FileType html set tabstop=2|set shiftwidth=2|set expandtab
 au FileType htmldjango set tabstop=2|set shiftwidth=2|set expandtab
 au FileType sql set tabstop=2|set shiftwidth=2|set expandtab
+au FileType javascript set tabstop=4|set shiftwidth=4|set expandtab
+au FileType css set tabstop=4|set shiftwidth=4|set expandtab
 
 set ignorecase
 set smartcase
@@ -142,3 +159,28 @@ if &term =~ "xterm"
 
     inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
 endif
+
+
+
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+au BufNewFile,BufRead *.html set filetype=html
+
