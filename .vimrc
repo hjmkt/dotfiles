@@ -23,6 +23,7 @@ set wildmode=list:longest
 nnoremap j gj
 nnoremap k gk
 nnoremap <down> gj
+
 nnoremap <up> gk
 set list listchars=tab:\▸\-
 set clipboard=unnamed
@@ -45,6 +46,9 @@ let g:python_highlight_all = 1
 set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
+
+source $VIMRUNTIME/macros/matchit.vim
+
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
@@ -174,8 +178,10 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 " \ pumvisible() ? "\<C-n>" :
 " \ neosnippet#expandable_or_jumpable() ?
 " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
 
 " For conceal markers.
 if has('conceal')
