@@ -1,4 +1,5 @@
 set number
+set relativenumber
 highlight LineNr ctermfg=grey
 set fenc=utf-8
 set encoding=utf-8
@@ -210,4 +211,6 @@ if has('conceal')
 endif
 
 au BufNewFile,BufRead *.html set filetype=html
+
+autocmd QuickFixCmdPost *grep* cwindow
 
