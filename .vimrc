@@ -214,3 +214,5 @@ au BufNewFile,BufRead *.html set filetype=html
 
 autocmd QuickFixCmdPost *grep* cwindow
 
+let g:neosnippet#snippets_directory = "~/.vim/snippets/"
+
