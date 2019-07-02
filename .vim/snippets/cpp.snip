@@ -15,3 +15,25 @@ snippet compro
     int main(){
 
     }
+
+snippet djkstra
+    template<typename T=ll>
+    ll djkstra(vector<vector<T>> &v, ll src, ll dst, function<bool(const T&, const T&)> comp=less<T>()){
+        auto c = [&comp](pair<T, ll> l, pair<T, ll> r){ return comp(l.first, r.first); };
+        priority_queue<pair<T, ll>, vector<pair<T, ll>>, decltype(c)> q(c);
+        vector<T> s(v.size(), -1);
+        q.push({0, src});
+        while(!q.empty()){
+            auto e = q.top();
+            ll d = e.first;
+            ll n = e.second;
+            if(s[n]>=0) continue;
+            s[n] = d;
+            if(n==dst) break;
+            rep(i, v.size()){
+                if(s[i]>=0 || v[n][i]<0) continue;
+                q.push({d+v[n][i], i});
+            }
+        }
+        return s[dst];
+    }
