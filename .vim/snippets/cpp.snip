@@ -74,3 +74,13 @@ snippet pow_mod
         }
         return a;
     }
+
+snippet gcd
+    ll gcd(ll n, ll m){
+        while(true){
+            if(n<m) swap(n, m);
+            if(!m) break;
+            n %= m;
+        }
+        return n;
+    }
