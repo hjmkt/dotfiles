@@ -19,13 +19,14 @@ snippet compro
 
 snippet djkstra
     template<typename T=ll>
-    ll djkstra(vector<vector<T>> &v, ll src, ll dst, function<bool(const T&, const T&)> comp=less<T>()){
+    ll djkstra(vector<vector<T>> &v, ll src, ll dst, function<bool(const T&, const T&)> comp=greater<T>()){
         auto c = [&comp](pair<T, ll> l, pair<T, ll> r){ return comp(l.first, r.first); };
         priority_queue<pair<T, ll>, vector<pair<T, ll>>, decltype(c)> q(c);
         vector<T> s(v.size(), -1);
         q.push({0, src});
         while(!q.empty()){
             auto e = q.top();
+            q.pop();
             ll d = e.first;
             ll n = e.second;
             if(s[n]>=0) continue;
