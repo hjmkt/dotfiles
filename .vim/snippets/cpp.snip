@@ -88,3 +88,28 @@ snippet gcd
         }
         return n;
     }
+
+snippet split
+    vector<string> split(string str, char del){
+        vector<string> res;
+        string sub = "";
+        for(char c : str){
+            if(c==del){
+                res.push_back(sub);
+                sub = "";
+            }
+            else sub += c;
+        }
+        res.push_back(sub);
+        return res;
+    }
+
+snippet phash
+    template<typename A, typename B>
+    struct pair_hash{
+        inline size_t operator()(const pair<A, B> &p) const{
+            const auto h1 = hash<A>()(p.first);
+            const auto h2 = hash<B>()(p.second);
+            return h1^(h2<<18);
+        }
+    };
