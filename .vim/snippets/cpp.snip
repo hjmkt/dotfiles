@@ -23,25 +23,46 @@ snippet compro
 
 snippet djkstra
     template<typename T=ll>
-    ll djkstra(vector<vector<T>> &v, ll src, ll dst, function<bool(const T&, const T&)> comp=greater<T>()){
+    vector<ll> djkstra(vector<vector<T>> &v, ll src, function<bool(const T&, const T&)> comp=greater<T>()){
         auto c = [&comp](pair<T, ll> l, pair<T, ll> r){ return comp(l.first, r.first); };
         priority_queue<pair<T, ll>, vector<pair<T, ll>>, decltype(c)> q(c);
-        vector<T> s(v.size(), -1);
+        vector<T> s(v.size(), LLONG_MAX);
         q.push({0, src});
         while(!q.empty()){
             auto e = q.top();
             q.pop();
             ll d = e.first;
             ll n = e.second;
-            if(s[n]>=0) continue;
+            if(s[n]<LLONG_MAX) continue;
             s[n] = d;
-            if(n==dst) break;
             rep(i, v.size()){
-                if(s[i]>=0 || v[n][i]<0) continue;
+                if(s[i]<LLONG_MAX || v[n][i]<0) continue;
                 q.push({d+v[n][i], i});
             }
         }
-        return s[dst];
+        return s;
+    }
+
+snippet edjkstra
+    template<typename T=ll>
+    vector<ll> djkstra(vector<unordered_map<ll, T>> &e, ll src, function<bool(const T&, const T&)> comp=greater<T>()){
+        auto c = [&comp](pair<T, ll> l, pair<T, ll> r){ return comp(l.first, r.first); };
+        priority_queue<pair<T, ll>, vector<pair<T, ll>>, decltype(c)> q(c);
+        vector<T> s(e.size(), LLONG_MAX);
+        q.push({0, src});
+        while(!q.empty()){
+            auto p = q.top();
+            q.pop();
+            ll d = p.first;
+            ll n = p.second;
+            if(s[n]<LLONG_MAX) continue;
+            s[n] = d;
+            for(auto t : e[n]){
+                if(s[t.first]<LLONG_MAX) continue;
+                q.push({d+t.second, t.first});
+            }
+        }
+        return s;
     }
 
 snippet warshall
