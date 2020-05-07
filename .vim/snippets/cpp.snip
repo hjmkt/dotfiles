@@ -138,3 +138,52 @@ snippet phash
             return h1^(h2<<18);
         }
     };
+
+snippet sstree
+    class SSTree{
+    public:
+        ll size;
+        vll v;
+        vll lv;
+    
+        SSTree(ll n){
+            this->size = n;
+            ll m = 1;
+            while(n>m) m *= 2;
+            this->v = vll(2*m-1, 0);
+            this->lv = vll(2*m-1, 0);
+        }
+    
+        ll get(ll left, ll right, ll level=0, ll idx=0){
+            if(left>right) return 0;
+            ll lb = (idx-(1<<level)+1) * (1<<level) + this->v.size()/2;
+            ll ub = lb + (this->v.size()+1)>>(level+2);
+            if(lb==left && ub==right){
+                stack<ll> s;
+                idx = (idx-1) / 2;
+                while(idx>=0){
+                    s.push(idx);
+                    idx = (idx-1) / 2;
+                }
+                while(!s.empty()){
+                    ll e = s.top();
+                    s.pop();
+                    v[e*2+1] += lv[e]/2;
+                    v[e*2+2] += lv[e]/2;
+                    lv[e] = 0;
+                }
+            }
+            else return get(left, (lb+ub)/2, level+1, idx*2+1) + get((lb+ub)/2+1, right, level+1, idx*2+2);
+        }
+    
+        void update(ll left, ll right, ll e, ll level=0, ll idx=0){
+            if(left>right) return;
+            ll lb = (idx-(1<<level)+1) * (1<<level) + this->v.size()/2;
+            ll ub = lb + (this->v.size()+1)>>(level+2);
+            if(lb==left && ub==right) v[idx] = lv[idx] = e;
+            else{
+                update(left, (lb+ub)/2, e, level+1, idx*2+1);
+                update((lb+ub)/2+1, right, e, level+1, idx*2+2);
+            }
+        }
+    };
