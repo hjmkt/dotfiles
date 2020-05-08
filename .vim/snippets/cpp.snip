@@ -156,34 +156,36 @@ snippet sstree
     
         ll get(ll left, ll right, ll level=0, ll idx=0){
             if(left>right) return 0;
-            ll lb = (idx-(1<<level)+1) * (1<<level) + this->v.size()/2;
-            ll ub = lb + (this->v.size()+1)>>(level+2);
+            ll step = (this->v.size()+1) >> (level+1);
+            ll lb = (idx-(1<<level)+1) * step;
+            ll ub = lb + step - 1;
             if(lb==left && ub==right){
-                stack<ll> s;
-                idx = (idx-1) / 2;
-                while(idx>=0){
-                    s.push(idx);
-                    idx = (idx-1) / 2;
+                vll s;
+                ll tmp = idx;
+                do{ s.push_back(tmp=(tmp-1)/2); } while(tmp>0);
+                for(auto it=s.rbegin(); it!=s.rend(); ++it){
+                    for(int i=1; i<=2; ++i) v[*it*2+i] += lv[*it]/2;
+                    for(int i=1; i<=2; ++i) lv[*it*2+i] += lv[*it]/2;
+                    lv[*it] = 0;
                 }
-                while(!s.empty()){
-                    ll e = s.top();
-                    s.pop();
-                    v[e*2+1] += lv[e]/2;
-                    v[e*2+2] += lv[e]/2;
-                    lv[e] = 0;
-                }
+                return v[idx];
             }
-            else return get(left, (lb+ub)/2, level+1, idx*2+1) + get((lb+ub)/2+1, right, level+1, idx*2+2);
+            else return get(left, min((lb+ub)/2, right), level+1, idx*2+1) + get(max((lb+ub)/2+1, left), right, level+1, idx*2+2);
         }
     
         void update(ll left, ll right, ll e, ll level=0, ll idx=0){
             if(left>right) return;
-            ll lb = (idx-(1<<level)+1) * (1<<level) + this->v.size()/2;
-            ll ub = lb + (this->v.size()+1)>>(level+2);
-            if(lb==left && ub==right) v[idx] = lv[idx] = e;
+            ll step = (this->v.size()+1) >> (level+1);
+            ll lb = (idx-(1<<level)+1) * step;
+            ll ub = lb + step - 1;
+            if(lb==left && ub==right){
+                this->v[idx] += e*step;
+                this->lv[idx] += e*step;
+            }
             else{
-                update(left, (lb+ub)/2, e, level+1, idx*2+1);
-                update((lb+ub)/2+1, right, e, level+1, idx*2+2);
+                ll mid = (lb+ub) / 2;
+                update(left, min(mid, right), e, level+1, idx*2+1);
+                update(max(mid+1, left), right, e, level+1, idx*2+2);
             }
         }
     };
