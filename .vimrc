@@ -4,18 +4,15 @@ highlight LineNr ctermfg=grey
 set fenc=utf-8
 set encoding=utf-8
 scriptencoding utf-8
-set fileencoding=utf-8 " 保存時の文字コード
+set fileencoding=utf-8
 set fileencodings=ucs-boms,utf-8,euc-jp,cp932 " 読み込み時の文字コードの自動判別. 左側が優先される
-set fileformats=unix,dos,mac " 改行コードの自動判別. 左側が優先される
+set fileformats=unix,dos,mac
 set ambiwidth=double " □や○文字が崩れる問題を解決
 set nobackup
 set noswapfile
 set autoread
 set hidden
 set showcmd
-"set mouse=a
-"set cursorline
-"set cursorcolumn
 set virtualedit=onemore
 set visualbell
 set showmatch
@@ -29,7 +26,7 @@ let mapleader = ","
 
 nnoremap <up> gk
 set list listchars=tab:\▸\-
-set clipboard=unnamed
+set clipboard+=unnamed
 
 nnoremap sc :<C-u>SyntasticCheck<CR>
 nnoremap ss :<C-u>sp<CR>
@@ -43,6 +40,8 @@ nnoremap nt :<C-u>NERDTree<CR>
 "inoremap [ []<ESC>i
 "inoremap [<Enter> []<Left><CR><ESC><S-o>
 inoremap <silent> jj <ESC>
+inoremap <C-f> <Right>
+inoremap <C-f><C-f> <ESC><S-a>
 
 let g:python_highlight_all = 1
 
@@ -51,6 +50,9 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 
 source $VIMRUNTIME/macros/matchit.vim
+source ~/.vim/scripts/atcoder.vim
+
+nnoremap tst :<C-u>TestSample<CR>
 
 call vundle#begin()
 
@@ -62,6 +64,9 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'Shougo/deoplete.nvim'
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 let g:deoplete#enable_at_startup = 1
+"let g:deoplete#enable_smart_case = 1
+let g:deoplete#min_pattern_length = 3
+let g:deoplete#auto_completion_start_length = 1
 Plugin 'roxma/nvim-yarp'
 Plugin 'roxma/vim-hug-neovim-rpc'
 Plugin 'Shougo/neosnippet.vim'
@@ -87,10 +92,13 @@ let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_python_pylint_args = "--load-plugins pylint_django --disable=C0111"
 let g:syntastic_mode_map = { 'mode': 'passive',
                             \ 'active_filetypes': [],
-                            \ 'passive_filetypes': ['python', 'html', 'javascript'] }
+                            \ 'passive_filetypes': ['python', 'html', 'javascript', 'cpp'] }
 "let g:syntastic_python_checkers = ['flake8', 'pylint', 'pep8', 'pycodestyle', 'pyflakes', 'python']
 let g:syntastic_htmldjango_checkers = ['python/pylint']
 let g:syntastic_html_checkers = ['jslint']
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = '-std=c++1z -stdlib=libc++ -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7'
+let g:syntastic_cpp_checkers = ['gcc', 'clang_check']
 let g:syntastic_javascript_checkers = ['eslint']
 
 Plugin 'scrooloose/nerdtree'
@@ -98,10 +106,16 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'Shougo/context_filetype.vim'
 Plugin 'osyo-manga/vim-precious'
 Plugin 'honza/vim-snippets'
-let g:neosnippet#snippets_directory = '/home/hjmkt/.vim/bundle/vim-snippets/snippets'
+let g:neosnippet#snippets_directory = '~/.vim/bundle/vim-snippets/snippets'
+
+Plugin 'justmao945/vim-clang'
+let g:clang_c_options = '-std=c11'
+let g:clang_cpp_options = '-std=c++1z -stdlib=libc++ -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7'
 
 Plugin 'cohama/lexima.vim'
 Plugin 'skwp/greplace.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
 Plugin 'easymotion/vim-easymotion'
 
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -124,19 +138,9 @@ map <Leader>k <Plug>(easymotion-k)
 
 call vundle#end()
 filetype plugin indent on
-"syntax enable
 syntax on
 set background=dark
-"colorscheme jellybeans
-"let g:molokai_original = 1
-"colorscheme molokai
 colorscheme gruvbox
-"colorscheme badwolf
-"colorscheme monokai
-"colorscheme rupza
-"colorscheme solarized
-"let g:badwolf_darkgutter = 1
-"let g:rehash256 = 1
 set t_Co=256
 
 noremap ; :
@@ -145,9 +149,9 @@ noremap : ;
 set smarttab
 set expandtab
 set tabstop=4
-set softtabstop=4 " 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
+set softtabstop=4
 set shiftwidth=4
-set autoindent " 改行時に前の行のインデントを継続する
+set autoindent
 set smartindent
 
 augroup fileTypeIndent
