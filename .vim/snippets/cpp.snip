@@ -23,46 +23,46 @@ snippet compro
 
 snippet djkstra
     template<typename T=ll>
-    vector<ll> djkstra(vector<vector<T>> &v, ll src, function<bool(const T&, const T&)> comp=greater<T>()){
-        auto c = [&comp](pair<T, ll> l, pair<T, ll> r){ return comp(l.first, r.first); };
-        priority_queue<pair<T, ll>, vector<pair<T, ll>>, decltype(c)> q(c);
+    pair<vector<ll>, vector<ll>> djkstra(vector<vector<T>> &v, ll src, function<bool(const T&, const T&)> comp=greater<T>()){
+        auto c = [&comp](tuple<T, ll, ll> l, tuple<T, ll, ll> r){ return comp(get<0>(l), get<0>(r)); };
+        priority_queue<tuple<T, ll, ll>, vector<tuple<T, ll, ll>>, decltype(c)> q(c);
         vector<T> s(v.size(), LLONG_MAX);
+        vector<ll> prev(v.size(), -1);
         q.push({0, src});
         while(!q.empty()){
-            auto e = q.top();
+            auto [d, n, p] = q.top();
             q.pop();
-            ll d = e.first;
-            ll n = e.second;
             if(s[n]<LLONG_MAX) continue;
             s[n] = d;
+            prev[n] = p;
             rep(i, v.size()){
                 if(s[i]<LLONG_MAX || v[n][i]<0) continue;
                 q.push({d+v[n][i], i});
             }
         }
-        return s;
+        return {s, prev};
     }
 
 snippet edjkstra
     template<typename T=ll>
-    vector<ll> djkstra(vector<unordered_map<ll, T>> &e, ll src, function<bool(const T&, const T&)> comp=greater<T>()){
-        auto c = [&comp](pair<T, ll> l, pair<T, ll> r){ return comp(l.first, r.first); };
-        priority_queue<pair<T, ll>, vector<pair<T, ll>>, decltype(c)> q(c);
+    pair<vector<ll>, vector<ll>> djkstra(vector<unordered_map<ll, T>> &e, ll src, function<bool(const T&, const T&)> comp=greater<T>()){
+        auto c = [&comp](tuple<T, ll, ll> l, tuple<T, ll, ll> r){ return comp(get<0>(l), get<0>(r)); };
+        priority_queue<tuple<T, ll, ll>, vector<tuple<T, ll, ll>>, decltype(c)> q(c);
         vector<T> s(e.size(), LLONG_MAX);
-        q.push({0, src});
+        vector<ll> prev(e.size(), -1);
+        q.push({0, src, -1});
         while(!q.empty()){
-            auto p = q.top();
+            auto [d, n, p] = q.top();
             q.pop();
-            ll d = p.first;
-            ll n = p.second;
             if(s[n]<LLONG_MAX) continue;
             s[n] = d;
+            prev[n] = p;
             for(auto t : e[n]){
                 if(s[t.first]<LLONG_MAX) continue;
-                q.push({d+t.second, t.first});
+                q.push({d+t.second, t.first, n});
             }
         }
-        return s;
+        return {s, prev};
     }
 
 snippet warshall
@@ -183,9 +183,101 @@ snippet sstree
                 this->lv[idx] += e*step;
             }
             else{
+                this->v[idx] += e*(right-left+1);
                 ll mid = (lb+ub) / 2;
                 update(left, min(mid, right), e, level+1, idx*2+1);
                 update(max(mid+1, left), right, e, level+1, idx*2+2);
             }
         }
     };
+
+snippet exgcd
+    pair<ll, ll> exgcd(ll a, ll b){
+        if(b==0) return {1, 0};
+        auto p = exgcd(b, a%b);
+        return {p.second, p.first-a/b*p.second};
+    }
+
+snippet unionfind
+    class UnionFind{
+    public:
+        ll size;
+        vll v;
+
+        UnionFind(ll n){
+            this->v = vll(n);
+            rep(i, n) this->v[i] = i;
+        }
+
+        ll root(ll n){
+            if(n!=v[n]) return v[n] = root(v[n]);
+            return n;
+        }
+
+        void unite(ll l, ll r){
+            ll lroot = root(l);
+            ll rroot = root(r);
+            if(lroot!=rroot) this->v[r] = lroot;
+        }
+    };
+
+snippet bellman
+    template<typename T=ll>
+    pair<vector<ll>, vector<ll>> bellman(vector<unordered_map<ll, T>> &e, ll src){
+        vll d(e.size(), LLONG_MAX);
+        vll prev(e.size(), -1);
+        d[src] = 0;
+        rep(i, e.size()){
+            bool updated = false;
+            rep(j, e.size()) for(auto p : e[j]){
+                if(d[j]==LLONG_MAX) continue;
+                if(d[p.first]>d[j]+p.second){
+                    updated = true;
+                    d[p.first] = d[j] + p.second;
+                    prev[p.first] = j;
+                    if(i==e.size()-1) return {};
+                }
+            }
+            if(!updated) break;
+        }
+        return {d, prev};
+    }
+
+snippet mincostflow
+    vector<unordered_map<ll, ll>> min_cost_flow(vector<unordered_map<ll, array<ll, 2>>> e, ll src, ll dst, ll flow){
+        vector<unordered_map<ll, ll>> f(e.size()), t(e.size());
+        rep(i, e.size()){
+            for(auto p : e[i]){
+                f[i][p.first] = 0;
+                t[i][p.first] = p.second[1];
+            }
+        }
+        while(flow>0){
+            auto [s, prev] = djkstra(t, src);
+            if(s[dst]==LLONG_MAX) return f;
+            vll path;
+            ll last = dst;
+            while(last>=0){
+                path.push_back(last);
+                last = prev[last];
+            }
+            reverse(all(path));
+            assert(path[0]==src);
+            assert(path[path.size()-1]==dst);
+            rep(i, t.size()) for(auto p : t[i]){
+                t[i][p.first] += s[i] - s[p.first];
+            }
+            ll m = flow;
+            rep(i, path.size()-1) m = min(m, e[path[i]][path[i+1]][0]);
+            rep(i, path.size()-1){
+                f[path[i]][path[i+1]] += m;
+                f[path[i+1]][path[i]] -= m;
+                e[path[i]][path[i+1]][0] -= m;
+                e[path[i+1]][path[i]][0] += m;
+                if(t[path[i+1]].find(path[i])==t[path[i+1]].end()) t[path[i+1]][path[i]] = -t[path[i]][path[i+1]];
+                if(e[path[i]][path[i+1]][0]<=0) t[path[i]].erase(path[i+1]);
+            }
+            flow -= m;
+        }
+        return f;
+    }
