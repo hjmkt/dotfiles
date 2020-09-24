@@ -217,7 +217,7 @@ snippet unionfind
         void unite(ll l, ll r){
             ll lroot = root(l);
             ll rroot = root(r);
-            if(lroot!=rroot) this->v[r] = lroot;
+            if(lroot!=rroot) this->v[rroot] = lroot;
         }
     };
 
