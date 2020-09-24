@@ -48,6 +48,10 @@ source ~/.vim/scripts/atcoder.vim
 
 nnoremap tst :<C-u>TestSample<CR>
 
+packadd termdebug
+set mouse=a
+let g:termdebug_wide = 160
+
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
@@ -91,7 +95,7 @@ let g:syntastic_mode_map = { 'mode': 'passive',
 let g:syntastic_htmldjango_checkers = ['python/pylint']
 let g:syntastic_html_checkers = ['jslint']
 let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = '-std=c++1z -stdlib=libc++ -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7'
+let g:syntastic_cpp_compiler_options = '-std=c++17 -stdlib=libc++ -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7'
 let g:syntastic_cpp_checkers = ['gcc', 'clang_check']
 let g:syntastic_javascript_checkers = ['eslint']
 
@@ -102,9 +106,14 @@ Plugin 'osyo-manga/vim-precious'
 Plugin 'honza/vim-snippets'
 let g:neosnippet#snippets_directory = '~/.vim/bundle/vim-snippets/snippets'
 
-Plugin 'justmao945/vim-clang'
-let g:clang_c_options = '-std=c11'
-let g:clang_cpp_options = '-std=c++1z -stdlib=libc++ -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7'
+"Plugin 'justmao945/vim-clang'
+"let g:clang_c_options = '-std=c11'
+"let g:clang_cpp_options = '-std=c++1z -stdlib=libc++ -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7'
+
+
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_global_extensions = ["coc-clangd"]
+
 
 Plugin 'cohama/lexima.vim'
 Plugin 'skwp/greplace.vim'
