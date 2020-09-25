@@ -281,3 +281,36 @@ snippet mincostflow
         }
         return f;
     }
+
+snippet fenwick
+    class FenwickTree{
+    public:
+        ll size;
+        vll v;
+
+        FenwickTree(ll n){
+            this->size = n;
+            ll m = 1;
+            while(n>m) m *= 2;
+            this->v = vll(m, 0);
+        }
+
+        ll _get(ll x){
+            ll lsb = x & -x;
+            ll r = x - lsb;
+            if(r>0) return this->v[x-1] + _get(r);
+            return this->v[x-1];
+        }
+
+        ll get(ll left, ll right){
+            if(left<=0) return _get(right+1);
+            return _get(right+1) - _get(left);
+        }
+
+        void update(ll x, ll e){
+            this->v[x] += e;
+            if(x==this->v.size()-1) return;
+            ll lsb = (x+1) & -(x+1);
+            update(x+lsb, e);
+        }
+    };
