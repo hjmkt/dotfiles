@@ -113,6 +113,7 @@ let g:neosnippet#snippets_directory = '~/.vim/bundle/vim-snippets/snippets'
 
 Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = ["coc-clangd"]
+let g:coc_disable_startup_warning = 1
 
 
 Plugin 'cohama/lexima.vim'
