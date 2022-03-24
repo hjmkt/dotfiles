@@ -1,0 +1,101 @@
+[[plugins]]
+repo = 'vim-denops/denops.vim'
+
+[[plugins]]
+repo = 'Shougo/pum.vim'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'scrooloose/nerdcommenter'
+
+[[plugins]]
+repo = 'cohama/lexima.vim'
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+
+[[plugins]]
+repo = 'phaazon/hop.nvim'
+hook_add = '''
+  let g:mapleader = ","
+  nnoremap <Leader>c :<C-u>HopChar2<CR>
+  nnoremap <Leader>w :<C-u>HopWord<CR>
+  nnoremap <Leader>l :<C-u>HopLine<CR>
+  nnoremap <Leader>/ :<C-u>HopPattern<CR>
+  lua require'hop'.setup()
+'''
+
+[[plugins]]
+repo = 'alvan/vim-closetag'
+hook_add = '''
+  let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+  let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+  let g:closetag_filetypes = 'html,xhtml,phtml'
+  let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+  let g:closetag_emptyTags_caseSensitive = 1
+  let g:closetag_shortcut = '>'
+  let g:closetag_close_shortcut = '<leader>>'
+'''
+
+[[plugins]]
+repo = 'dense-analysis/ale'
+hook_add = '''
+  let g:ale_sign_column_always = 1
+  let g:ale_sign_error = '✗'
+  let g:ale_sign_warning = '⚠'
+  let g:ale_fix_on_save = 1
+  let g:ale_fixers = {
+  \ 'rust': ['rustfmt'],
+  \ 'python': ['black'],
+  \ }
+  let g:ale_linters = {
+  \ 'cpp': ['cppcheck', 'clangtidy'],
+  \ 'rust': ['rls'],
+  \ 'python': ['flake8'],
+  \ }
+'''
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+hook_add = '''
+  nnoremap fern :<C-u>Fern . -reveal=% -drawer<CR>
+'''
+
+[[plugins]]
+repo = 'lambdalisue/fern-git-status.vim'
+
+[[plugins]]
+repo = 'lambdalisue/nerdfont.vim'
+
+[[plugins]]
+repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+hook_add = '''
+  let g:fern#renderer = 'nerdfont'
+'''
+
+[[plugins]]
+repo = 'lambdalisue/glyph-palette.vim'
+hook_add = '''
+  augroup my-glyph-palette
+    autocmd! *
+    autocmd FileType fern call glyph_palette#apply()
+    autocmd FileType nerdtree,startify call glyph_palette#apply()
+  augroup END
+'''
