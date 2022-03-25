@@ -29,6 +29,9 @@ repo = 'Yggdroot/indentLine'
 repo = 'vim-airline/vim-airline'
 
 [[plugins]]
+repo = 'wellle/targets.vim'
+
+[[plugins]]
 repo = 'phaazon/hop.nvim'
 hook_add = '''
   let g:mapleader = ","
@@ -73,9 +76,6 @@ hook_add = '''
 repo = 'airblade/vim-gitgutter'
 
 [[plugins]]
-repo = 'rust-lang/rust.vim'
-
-[[plugins]]
 repo = 'lambdalisue/fern.vim'
 hook_add = '''
   nnoremap fern :<C-u>Fern . -reveal=% -drawer<CR>
@@ -101,4 +101,37 @@ hook_add = '''
     autocmd FileType fern call glyph_palette#apply()
     autocmd FileType nerdtree,startify call glyph_palette#apply()
   augroup END
+'''
+
+[[plugins]]
+repo = 'yuki-yano/fzf-preview.vim'
+rev = 'release/rpc'
+depends=['junegunn/fzf']
+
+[[plugins]]
+repo = 'junegunn/fzf'
+build = './install --all'
+merged = '0'
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+hook_add = '''
+  command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \   'rg --line-number --no-heading '.shellescape(<q-args>), 0,
+    \   fzf#vim#with_preview({'options': '--exact --reverse'}, 'right:50%:wrap'))
+'''
+
+[[plugins]]
+repo = 'jremmen/vim-ripgrep'
+
+[[plugins]]
+repo = 'kassio/neoterm'
+hook_add = '''
+  nnoremap nt :<C-u>Ttoggle<CR>
+  tnoremap nt <C-\><C-n>:<C-u>Ttoggle<CR>
+  let g:neoterm_autoinsert = 1
+  let g:neoterm_autoscroll = 1
+  let g:neoterm_default_mod = "belowright"
 '''
