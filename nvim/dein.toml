@@ -17,13 +17,16 @@ repo = 'scrooloose/nerdcommenter'
 repo = 'cohama/lexima.vim'
 
 [[plugins]]
-repo = 'tpope/vim-surround'
+repo = 'machakann/vim-sandwich'
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
 
 [[plugins]]
 repo = 'Yggdroot/indentLine'
+
+[[plugins]]
+repo = 'vim-airline/vim-airline'
 
 [[plugins]]
 repo = 'phaazon/hop.nvim'

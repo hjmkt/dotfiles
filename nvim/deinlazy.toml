@@ -133,7 +133,9 @@ lua << EOF
         importPrefix = "by_self",
       },
       diagnostics = {
-          disabled = { "unresolved-import" }
+          enable = true,
+          disabled = { "unresolved-import", "unresolved-proc-macro" },
+          enableExperimental = true,
       },
       cargo = {
         loadOutDirsFromCheck = true,
@@ -167,3 +169,20 @@ on_source = 'ddc.vim'
 hook_source = '''
   call popup_preview#enable()
 '''
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+merged = 0
+on_event = 'BufRead'
+hook_post_update = 'TSUpdate'
+hook_source = '''
+lua << EOF
+  require('nvim-treesitter.configs').setup {
+    ensure_installed = 'maintained',
+    highlight = {
+      enable = true,
+    },
+  }
+EOF
+'''
+
