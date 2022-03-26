@@ -6,9 +6,9 @@ hook_source = '''
   call ddc#custom#patch_global('sources', ['nvim-lsp', 'around', 'vsnip'])
   call ddc#custom#patch_global('sourceOptions', {
     \ '_': {
-    \   'matchers': ['matcher_head'],
-    \   'sorters': ['sorter_rank'],
-    \   'converters': ['converter_remove_overlap'],
+    \   'matchers': ['matcher_head', 'matcher_fuzzy'],
+    \   'sorters': ['sorter_rank', 'sorter_fuzzy'],
+    \   'converters': ['converter_remove_overlap', 'converter_fuzzy'],
     \ },
     \ 'around': {'mark': 'A'},
     \ 'nvim-lsp': {
@@ -53,6 +53,10 @@ on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'LumaKernel/ddc-file'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'tani/ddc-fuzzy'
 on_source = 'ddc.vim'
 
 [[plugins]]

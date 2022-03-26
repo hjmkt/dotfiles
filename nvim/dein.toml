@@ -105,7 +105,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'yuki-yano/fzf-preview.vim'
-rev = 'release/rpc'
+rev = 'release/remote'
 depends=['junegunn/fzf']
 
 [[plugins]]
@@ -121,6 +121,21 @@ hook_add = '''
     \ call fzf#vim#grep(
     \   'rg --line-number --no-heading '.shellescape(<q-args>), 0,
     \   fzf#vim#with_preview({'options': '--exact --reverse'}, 'right:50%:wrap'))
+'''
+
+[[plugins]]
+repo = 'gfanto/fzf-lsp.nvim'
+depends=['junegunn/fzf.vim']
+merged = '0'
+hook_add = '''
+  lua require'fzf_lsp'.setup()
+  function! GetCurWordDef() abort
+      let word = expand('<cword>')
+      execute 'WorkspaceSymbols'
+      call feedkeys('', 'n')
+      call feedkeys('' . word)
+  endfunction
+  nnoremap <C-d><C-f> :call GetCurWordDef()<CR>
 '''
 
 [[plugins]]
