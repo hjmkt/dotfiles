@@ -67,7 +67,6 @@ hook_add = '''
   \ }
   let g:ale_linters = {
   \ 'cpp': ['cppcheck', 'clangtidy'],
-  \ 'rust': ['rls'],
   \ 'python': ['flake8'],
   \ }
 '''
@@ -144,8 +143,8 @@ repo = 'jremmen/vim-ripgrep'
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
-  nnoremap nt :<C-u>Ttoggle<CR>
-  tnoremap nt <C-\><C-n>:<C-u>Ttoggle<CR>
+  nnoremap tm :<C-u>Ttoggle<CR>
+  tnoremap tm <C-\><C-n>:<C-u>Ttoggle<CR>
   let g:neoterm_autoinsert = 1
   let g:neoterm_autoscroll = 1
   let g:neoterm_default_mod = "belowright"

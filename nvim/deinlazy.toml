@@ -138,7 +138,6 @@ lua << EOF
       },
       diagnostics = {
           enable = true,
-          disabled = { "unresolved-import", "unresolved-proc-macro" },
           enableExperimental = true,
       },
       cargo = {
