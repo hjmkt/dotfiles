@@ -11,6 +11,10 @@
             "using vvvll = vector<vvll>;",
             "template<class T> using uset = unordered_set<T>;",
             "template<class T, class U> using umap = unordered_map<T, U>;",
+            "template<class T> using mset = multiset<T>;",
+            "template<class T, class U> using mmap = multimap<T, U>;",
+            "template<class T> using umset = unordered_multiset<T>;",
+            "template<class T, class U> using ummap = unordered_multimap<T, U>;",
             "",
             "#define REP(i, n, m) for(ll i=n; i<(ll)m; ++i)",
             "#define IREP(i, n, m) for(ll i=n-1; i>=m; --i)",
@@ -363,7 +367,7 @@
             "    return s;",
             "}"
         ],
-        "description": "Strong-Connected-Components deconstruction algorithm for competitive programming"
+        "description": "Strong-Connected-Components decomposition algorithm for competitive programming"
     },
     "Placeholder": {
         "prefix": ["placeholder"],
