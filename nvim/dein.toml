@@ -134,7 +134,7 @@ hook_add = '''
       call feedkeys('', 'n')
       call feedkeys('' . word)
   endfunction
-  nnoremap <C-d><C-f> :call GetCurWordDef()<CR>
+  nnoremap <C-g> :call GetCurWordDef()<CR>
 '''
 
 [[plugins]]
