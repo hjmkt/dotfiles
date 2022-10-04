@@ -5,13 +5,12 @@ vim.cmd([[ set mouse=v ]])
 
 vim.o.number = true
 vim.o.relativenumber = true
-vim.cmd("autocmd ColorScheme * highlight LineNr ctermfg=grey")
 vim.o.termguicolors = true
 vim.o.fenc = "utf-8"
 vim.o.encoding = "utf-8"
 vim.scriptencoding = "utf-8"
 vim.o.fileencoding = "utf-8"
-vim.o.fileformats = "dos", "unix", "mac"
+vim.o.fileformats = "unix", "mac", "dos"
 vim.o.nobackup = true
 vim.o.noswapfile = true
 vim.o.autoread = true
@@ -46,6 +45,7 @@ vim.o.completeopt = "menu"
 vim.g.indentLine_conceallevel = 0
 
 vim.cmd([[ colorscheme gruvbox ]])
+vim.cmd("autocmd ColorScheme * highlight LineNr ctermfg=grey")
 vim.g.vim_json_conceal = 0
 
 vim.cmd("source ~/.vim/scripts/atcoder.vim")
