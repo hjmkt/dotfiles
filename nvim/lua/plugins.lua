@@ -59,9 +59,9 @@ return require("packer").startup(function(use)
 				vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.format{ async = true }<CR>")
 
 				-- format on save
-                if vim.bo.filetype ~= "cpp" then
-                    vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format{ timeout_ms = 2000 }")
-                end
+				if vim.bo.filetype ~= "cpp" then
+					vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format{ timeout_ms = 2000 }")
+				end
 			end
 
 			if client.server_capabilities.documentRangeFormattingProvider then
@@ -134,6 +134,7 @@ return require("packer").startup(function(use)
 	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-vsnip")
 	use("hrsh7th/vim-vsnip")
+	--use("hrsh7th/cmp-nvim-lsp-signature-help")
 
 	-- Set up nvim-cmp.
 	local cmp = require("cmp")
@@ -161,6 +162,7 @@ return require("packer").startup(function(use)
 		sources = cmp.config.sources({
 			{ name = "nvim_lsp" },
 			{ name = "vsnip" }, -- For vsnip users.
+			--{ name = "nvim_lsp_signature_help" },
 			-- { name = 'luasnip' }, -- For luasnip users.
 			-- { name = 'ultisnips' }, -- For ultisnips users.
 			-- { name = 'snippy' }, -- For snippy users.
