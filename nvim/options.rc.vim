@@ -31,7 +31,7 @@ set autoindent
 set smartindent
 
 set list listchars=tab:\▸\-
-set clipboard+=unnamed
+set clipboard+=unnamedplus
 
 set nocompatible
 set background=dark
@@ -44,3 +44,4 @@ set wrapscan
 set hlsearch
 nnoremap <Esc> :nohlsearch<CR><Esc>
 set completeopt=menu
+let g:indentLine_conceallevel = 0
