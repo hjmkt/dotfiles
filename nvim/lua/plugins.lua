@@ -52,7 +52,7 @@ return require("packer").startup(function(use)
 			require("null-ls").builtins.diagnostics.yamllint,
 			require("null-ls").builtins.formatting.gofmt,
 			require("null-ls").builtins.formatting.rustfmt,
-			require("null-ls").builtins.completion.spell,
+			--require("null-ls").builtins.completion.spell,
 		},
 		on_attach = function(client, bufnr)
 			if client.server_capabilities.documentFormattingProvider then
