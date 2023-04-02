@@ -1,38 +1,113 @@
-[[plugins]]
-repo = 'vim-denops/denops.vim'
+#[[plugins]]
+#repo = 'vim-denops/denops.vim'
 
-[[plugins]]
-repo = 'nvim-lua/plenary.nvim'
+#[[plugins]]
+#repo = 'Shougo/ddc.vim'
+#on_event = 'InsertEnter'
+#depends = ['denops.vim']
+#hook_post_source = '''
+  #"call ddc#custom#patch_global('sources', ['nvim-lsp', 'around', 'vsnip'])
+  #call ddc#custom#patch_global('sources', ['around'])
+  #call ddc#custom#patch_global('sourceOptions', {
+    #\ '_': {
+    #\   'matchers': ['matcher_head', 'matcher_fuzzy'],
+    #\   'sorters': ['sorter_rank', 'sorter_fuzzy'],
+    #\   'converters': ['converter_remove_overlap', 'converter_fuzzy'],
+    #\ },
+    #\ 'around': {'mark': 'A'},
+    #\ 'nvim-lsp': {
+    #\   'mark': 'LSP',
+    #\   'forceCompletionPattern': '\.\w*|:\w*|->\w*',
+    #\ },
+    #\ })
 
-[[plugins]]
-repo = 'Shougo/pum.vim'
+  #call ddc#custom#patch_global('sourceParams', {
+    #\ 'around': {'maxSize': 500},
+    #\ 'nvim-lsp': { 'kindLabels': { 'Class': 'c' } },
+    #\ })
 
-[[plugins]]
-repo = 'osyo-manga/vim-precious'
+  #inoremap <silent><expr> <TAB>
+    #\ ddc#map#pum_visible() ? '<C-n>' :
+    #\ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+    #\ '<TAB>' : ddc#map#manual_complete()
+  #inoremap <expr><S-TAB>  ddc#map#pum_visible() ? '<C-p>' : '<C-h>'
 
-[[plugins]]
-repo = 'Shougo/context_filetype.vim'
+  #call ddc#enable()
+#'''
+
+
+
+#[[plugins]]
+#repo = 'nvim-lua/plenary.nvim'
+
+#[[plugins]]
+#repo = 'jose-elias-alvarez/null-ls.nvim'
+#depends = ['plenary.nvim']
+#hook_add = '''
+#lua << EOF
+    #local null_ls = require "null-ls"
+    #null_ls.setup {
+        #sources = {
+            #null_ls.builtins.formatting.prettier.with {
+                #prefer_local = "node_modules/.bin",
+            #},
+        #},
+        #on_attach = function(client, bufnr)
+            #if client.server_capabilities.documentFormattingProvider then
+                #vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.formatting()<CR>")
+
+                #-- format on save
+                #vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()")
+            #end
+
+            #if client.server_capabilities.documentRangeFormattingProvider then
+                #vim.cmd("xnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.range_formatting({})<CR>")
+            #end
+        #end,
+    #}
+#EOF
+#'''
+
+#[[plugins]]
+#repo = 'hrsh7th/vim-vsnip-integ'
+
+#[[plugins]]
+#repo = 'rafamadriz/friendly-snippets'
+
+
+
+#[[plugins]]
+#repo = 'Shougo/pum.vim'
+
+#[[plugins]]
+#repo = 'osyo-manga/vim-precious'
+
+#[[plugins]]
+#repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]
 repo = 'scrooloose/nerdcommenter'
 
-[[plugins]]
-repo = 'cohama/lexima.vim'
+#[[plugins]]
+#repo = 'cohama/lexima.vim'
 
-[[plugins]]
-repo = 'machakann/vim-sandwich'
+#[[plugins]]
+#repo = 'machakann/vim-sandwich'
 
-[[plugins]]
-repo = 'tpope/vim-fugitive'
+#[[plugins]]
+#repo = 'tpope/vim-fugitive'
 
-[[plugins]]
-repo = 'Yggdroot/indentLine'
+#[[plugins]]
+#repo = 'Yggdroot/indentLine'
 
-[[plugins]]
-repo = 'vim-airline/vim-airline'
+#[[plugins]]
+#repo = 'vim-airline/vim-airline'
 
-[[plugins]]
-repo = 'wellle/targets.vim'
+#[[plugins]]
+#repo = 'wellle/targets.vim'
+
+#[[plugins]]
+#repo = 'tpope/vim-markdown'
 
 [[plugins]]
 repo = 'phaazon/hop.nvim'
@@ -45,65 +120,66 @@ hook_add = '''
   lua require'hop'.setup()
 '''
 
-[[plugins]]
-repo = 'alvan/vim-closetag'
-hook_add = '''
-  let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
-  let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-  let g:closetag_filetypes = 'html,xhtml,phtml'
-  let g:closetag_xhtml_filetypes = 'xhtml,jsx'
-  let g:closetag_emptyTags_caseSensitive = 1
-  let g:closetag_shortcut = '>'
-  let g:closetag_close_shortcut = '<leader>>'
-'''
+#[[plugins]]
+#repo = 'alvan/vim-closetag'
+#hook_add = '''
+  #let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
+  #let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+  #let g:closetag_filetypes = 'html,xhtml,phtml'
+  #let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+  #let g:closetag_emptyTags_caseSensitive = 1
+  #let g:closetag_shortcut = '>'
+  #let g:closetag_close_shortcut = '<leader>>'
+#'''
 
-[[plugins]]
-repo = 'dense-analysis/ale'
-hook_add = '''
-  let g:ale_sign_column_always = 1
-  let g:ale_sign_error = '✗'
-  let g:ale_sign_warning = '⚠'
-  let g:ale_fix_on_save = 1
-  let g:ale_fixers = {
-  \ 'rust': ['rustfmt'],
-  \ 'python': ['black'],
-  \ }
-  let g:ale_linters = {
-  \ 'cpp': ['cppcheck', 'clangtidy'],
-  \ 'python': ['flake8'],
-  \ }
-'''
+#[[plugins]]
+#repo = 'dense-analysis/ale'
+#hook_add = '''
+  #let g:ale_sign_column_always = 1
+  #let g:ale_sign_error = '✗'
+  #let g:ale_sign_warning = '⚠'
+  #let g:ale_fix_on_save = 1
+  #let g:ale_fixers = {
+  #\ 'rust': ['rustfmt'],
+  #\ 'python': ['black'],
+  #\ }
+  #let g:ale_linters = {
+  #\ 'cpp': ['cppcheck', 'clangtidy'],
+  #\ 'python': ['flake8'],
+  #\ }
+#'''
 
-[[plugins]]
-repo = 'airblade/vim-gitgutter'
+#[[plugins]]
+#repo = 'airblade/vim-gitgutter'
 
-[[plugins]]
-repo = 'lambdalisue/fern.vim'
-hook_add = '''
-  nnoremap fern :<C-u>Fern . -reveal=% -drawer<CR>
-'''
+#[[plugins]]
+#repo = 'lambdalisue/fern.vim'
+#rev = 'main'
+#hook_add = '''
+  #nnoremap fern :<C-u>Fern . -reveal=% -drawer<CR>
+#'''
 
-[[plugins]]
-repo = 'lambdalisue/fern-git-status.vim'
+#[[plugins]]
+#repo = 'lambdalisue/fern-git-status.vim'
 
-[[plugins]]
-repo = 'lambdalisue/nerdfont.vim'
+#[[plugins]]
+#repo = 'lambdalisue/nerdfont.vim'
 
-[[plugins]]
-repo = 'lambdalisue/fern-renderer-nerdfont.vim'
-hook_add = '''
-  let g:fern#renderer = 'nerdfont'
-'''
+#[[plugins]]
+#repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+#hook_add = '''
+  #let g:fern#renderer = 'nerdfont'
+#'''
 
-[[plugins]]
-repo = 'lambdalisue/glyph-palette.vim'
-hook_add = '''
-  augroup my-glyph-palette
-    autocmd! *
-    autocmd FileType fern call glyph_palette#apply()
-    autocmd FileType nerdtree,startify call glyph_palette#apply()
-  augroup END
-'''
+#[[plugins]]
+#repo = 'lambdalisue/glyph-palette.vim'
+#hook_add = '''
+  #augroup my-glyph-palette
+    #autocmd! *
+    #autocmd FileType fern call glyph_palette#apply()
+    #autocmd FileType nerdtree,startify call glyph_palette#apply()
+  #augroup END
+#'''
 
 [[plugins]]
 repo = 'yuki-yano/fzf-preview.vim'
@@ -129,7 +205,7 @@ hook_add = '''
 repo = 'gfanto/fzf-lsp.nvim'
 depends=['junegunn/fzf.vim']
 merged = '0'
-hook_add = '''
+hook_post_source = '''
   lua require'fzf_lsp'.setup()
   function! GetCurWordDef() abort
       let word = expand('<cword>')
@@ -141,14 +217,17 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'jremmen/vim-ripgrep'
+repo = 'github/copilot.vim'
 
-[[plugins]]
-repo = 'kassio/neoterm'
-hook_add = '''
-  nnoremap tm :<C-u>Ttoggle<CR>
-  tnoremap tm <C-\><C-n>:<C-u>Ttoggle<CR>
-  let g:neoterm_autoinsert = 1
-  let g:neoterm_autoscroll = 1
-  let g:neoterm_default_mod = "belowright"
-'''
+#[[plugins]]
+#repo = 'jremmen/vim-ripgrep'
+
+#[[plugins]]
+#repo = 'kassio/neoterm'
+#hook_add = '''
+  #nnoremap tm :<C-u>Ttoggle<CR>
+  #tnoremap tm <C-\><C-n>:<C-u>Ttoggle<CR>
+  #let g:neoterm_autoinsert = 1
+  #let g:neoterm_autoscroll = 1
+  #let g:neoterm_default_mod = "belowright"
+#'''

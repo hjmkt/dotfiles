@@ -10,6 +10,9 @@ return require("packer").startup(function(use)
 	-- parenthesis completion
 	use("cohama/lexima.vim")
 
+	use("mbbill/undotree")
+	vim.api.nvim_set_keymap("n", "<Leader>u", ":<C-u>UndotreeToggle<CR>", { noremap = true, silent = true })
+
 	use({ "andymass/vim-matchup", event = "VimEnter" })
 
 	use({
@@ -52,7 +55,8 @@ return require("packer").startup(function(use)
 			require("null-ls").builtins.diagnostics.yamllint,
 			require("null-ls").builtins.formatting.gofmt,
 			require("null-ls").builtins.formatting.rustfmt,
-			require("null-ls").builtins.completion.spell,
+			require("null-ls").builtins.formatting.black,
+			--require("null-ls").builtins.completion.spell,
 		},
 		on_attach = function(client, bufnr)
 			if client.server_capabilities.documentFormattingProvider then
@@ -377,4 +381,9 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
 		end,
 	})
+	use({"github/copilot.vim",
+		config = function()
+			require("copilot").setup({})
+		end,
+    })
 end)

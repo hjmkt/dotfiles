@@ -50,3 +50,5 @@ vim.g.vim_json_conceal = 0
 
 vim.cmd("source ~/.vim/scripts/atcoder.vim")
 vim.g.mapleader = ","
+--vim.cmd([[ set formatoptions-=ro ]])
+vim.cmd([[ autocmd FileType * setlocal formatoptions-=cro ]])
