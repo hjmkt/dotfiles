@@ -426,7 +426,7 @@
       "ll N_PRIMES = 100000;",
       "vector<bool> is_prime(N_PRIMES+1, true);",
       "vll primes;",
-      "REP(i, 2, N+1){",
+      "REP(i, 2, N_PRIMES+1){",
       "    if(is_prime[i]){",
       "        primes.push_back(i);",
       "        for(ll j=i+i; j<N_PRIMES+1; j+=i) is_prime[j] = false;",
