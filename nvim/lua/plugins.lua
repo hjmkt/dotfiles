@@ -3,6 +3,13 @@
 -- Only required if you have packer configured as `opt`
 vim.cmd([[packadd packer.nvim]])
 
+function CopilotChatBuffer ()
+    local input = vim.fn.input("Quick Chat: ")
+    if input ~= "" then
+        require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+    end
+end
+
 return require("packer").startup(function(use)
 	-- Packer can manage itself
 	use("wbthomason/packer.nvim")
@@ -15,12 +22,13 @@ return require("packer").startup(function(use)
 
 	use({ "andymass/vim-matchup", event = "VimEnter" })
 
-	use({
-		"w0rp/ale",
-		ft = { "sh", "zsh", "bash", "c", "cpp", "cmake", "html", "markdown", "racket", "vim", "tex" },
-		cmd = "ALEEnable",
-		config = "vim.cmd[[ALEEnable]]",
-	})
+	--use({
+	--"w0rp/ale",
+	----ft = { "sh", "zsh", "bash", "c", "cpp", "cmake", "html", "markdown", "racket", "vim", "tex" },
+	--ft = { "sh", "zsh", "bash", "cmake", "html", "markdown", "racket", "vim", "tex" },
+	--cmd = "ALEEnable",
+	--config = "vim.cmd[[ALEEnable]]",
+	--})
 
 	use({
 		"haorenW1025/completion-nvim",
@@ -49,6 +57,7 @@ return require("packer").startup(function(use)
 				prefer_local = "node_modules/.bin",
 			}),
 			require("null-ls").builtins.diagnostics.eslint,
+			require("null-ls").builtins.diagnostics.pyproject_flake8,
 			require("null-ls").builtins.diagnostics.luacheck.with({
 				extra_args = { "--globals", "vim", "--globals", "awesome" },
 			}),
@@ -56,6 +65,7 @@ return require("packer").startup(function(use)
 			require("null-ls").builtins.formatting.gofmt,
 			require("null-ls").builtins.formatting.rustfmt,
 			require("null-ls").builtins.formatting.black,
+			--require("null-ls").builtins.formatting.clang_format,
 			--require("null-ls").builtins.completion.spell,
 		},
 		on_attach = function(client, bufnr)
@@ -63,9 +73,10 @@ return require("packer").startup(function(use)
 				vim.cmd("nnoremap <silent><buffer> <Leader>f :lua vim.lsp.buf.format{ async = true }<CR>")
 
 				-- format on save
-				if vim.bo.filetype ~= "cpp" then
-					vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format{ timeout_ms = 2000 }")
-				end
+				--if vim.bo.filetype ~= "cpp" then
+				--vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format{ timeout_ms = 2000 }")
+				--end
+				vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.format{ timeout_ms = 2000 }")
 			end
 
 			if client.server_capabilities.documentRangeFormattingProvider then
@@ -203,7 +214,7 @@ return require("packer").startup(function(use)
 	})
 
 	-- Set up lspconfig.
-	local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+	local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 	-- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 	local on_attach = function(client, bufnr)
 		-- Enable completion triggered by <c-x><c-o>
@@ -242,16 +253,28 @@ return require("packer").startup(function(use)
 			["rust-analyzer"] = {},
 		},
 	})
-	require("lspconfig")["pylsp"].setup({
-		on_attach = on_attach,
-		flags = lsp_flags,
-		capabilities = capabilities,
-	})
+	--require("lspconfig")["pylsp"].setup({
+	--on_attach = on_attach,
+	--flags = lsp_flags,
+	--capabilities = capabilities,
+	--})
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.offsetEncoding = { "utf-16" }
 	capabilities.document_formatting = false
+	-- formatting on save
+	local clangd_on_attach = function(client, bufnr)
+		on_attach(client, bufnr)
+		--vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)")
+		--client.resolved_capabilities.document_formatting = false
+
+		--client.server_capabilities.documentFormattingProvider = false
+		--client.server_capabilities.documentRangeFormattingProvider = false
+	end
 	require("lspconfig")["clangd"].setup({
-		on_attach = on_attach,
+		on_attach = clangd_on_attach,
+		--init_options = {
+		--documentFormatting = true,
+		--},
 		flags = lsp_flags,
 		capabilities = capabilities,
 	})
@@ -259,6 +282,8 @@ return require("packer").startup(function(use)
 	-- fern
 	use({ "lambdalisue/fern.vim", branch = "main" })
 	vim.api.nvim_set_keymap("n", "fern", ":<C-u>Fern . -reveal=% -drawer<CR>", { noremap = true, silent = true })
+	-- show hidden files
+	vim.g["fern#default_hidden"] = 1
 
 	use("lambdalisue/fern-git-status.vim")
 	use("lambdalisue/nerdfont.vim")
@@ -272,8 +297,9 @@ return require("packer").startup(function(use)
 	vim.cmd("autocmd FileType fern call glyph_palette#apply()")
 	vim.cmd("autocmd FileType nerdtree,startify call glyph_palette#apply()")
 	vim.cmd("augroup END")
+	--
 
-	-- Lua
+	-- error/warning finder
 	use({
 		"folke/trouble.nvim",
 		requires = "kyazdani42/nvim-web-devicons",
@@ -291,19 +317,24 @@ return require("packer").startup(function(use)
 	vim.keymap.set("n", "<leader>xl", "<cmd>TroubleToggle loclist<cr>", { silent = true, noremap = true })
 	vim.keymap.set("n", "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", { silent = true, noremap = true })
 	vim.keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>", { silent = true, noremap = true })
+	--
 
+	-- easy comment toggle
 	use("scrooloose/nerdcommenter")
+	--
 
+	-- hop
 	use("phaazon/hop.nvim")
 	vim.api.nvim_set_keymap("n", "<Leader>c", ":<C-u>HopChar2<CR>", { noremap = true, silent = true })
 	vim.api.nvim_set_keymap("n", "<Leader>w", ":<C-u>HopWord<CR>", { noremap = true, silent = true })
 	vim.api.nvim_set_keymap("n", "<Leader>l", ":<C-u>HopLine<CR>", { noremap = true, silent = true })
 	vim.api.nvim_set_keymap("n", "<Leader>/", ":<C-u>HopPattern<CR>", { noremap = true, silent = true })
 	require("hop").setup()
+	--
 
 	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.0",
+		tag = "0.1.4",
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 	local builtin = require("telescope.builtin")
@@ -338,11 +369,7 @@ return require("packer").startup(function(use)
 	})
 
 	use("lukas-reineke/indent-blankline.nvim")
-	require("indent_blankline").setup({
-		-- for example, context is off by default, use this to turn it on
-		--show_current_context = true,
-		--show_current_context_start = true,
-	})
+	require("ibl").setup()
 
 	use("machakann/vim-sandwich")
 	use("kyazdani42/nvim-web-devicons")
@@ -381,9 +408,142 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
 		end,
 	})
-	use({"github/copilot.vim",
+
+	use({
+		"github/copilot.vim",
 		config = function()
 			require("copilot").setup({})
 		end,
-    })
+	})
+
+	use({
+		"ThePrimeagen/refactoring.nvim",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-treesitter/nvim-treesitter" },
+		},
+	})
+
+	require("refactoring").setup({
+		prompt_func_return_type = {
+			go = false,
+			java = false,
+
+			cpp = false,
+			c = false,
+			h = false,
+			hpp = false,
+			cxx = false,
+		},
+		prompt_func_param_type = {
+			go = false,
+			java = false,
+
+			cpp = false,
+			c = false,
+			h = false,
+			hpp = false,
+			cxx = false,
+		},
+		printf_statements = {},
+		print_var_statements = {},
+		show_success_message = false, -- shows a message with information about the refactor on success
+		-- i.e. [Refactor] Inlined 3 variable occurrences
+	})
+	--vim.api.nvim_set_keymap("n", "rf", ":<C-u>Refactor<CR>", { noremap = true, silent = true })
+	--vim.keymap.set("x", "<leader>re", ":Refactor extract ")
+	--vim.keymap.set("x", "<leader>rf", ":Refactor extract_to_file ")
+
+	--vim.keymap.set("x", "<leader>rv", ":Refactor extract_var ")
+
+	--vim.keymap.set({ "n", "x" }, "<leader>ri", ":Refactor inline_var")
+
+	--vim.keymap.set("n", "<leader>rI", ":Refactor inline_func")
+
+	--vim.keymap.set("n", "<leader>rb", ":Refactor extract_block")
+	--vim.keymap.set("n", "<leader>rbf", ":Refactor extract_block_to_file")
+
+	vim.keymap.set("x", "<leader>re", function()
+		require("reeactoring").refactor("Extract Function")
+	end)
+	vim.keymap.set("x", "<leader>rf", function()
+		require("refactoring").refactor("Extract Function To File")
+	end)
+	-- Extract function supports only visual mode
+	vim.keymap.set("x", "<leader>rv", function()
+		require("refactoring").refactor("Extract Variable")
+	end)
+	-- Extract variable supports only visual mode
+	vim.keymap.set("n", "<leader>rI", function()
+		require("refactoring").refactor("Inline Function")
+	end)
+	-- Inline func supports only normal
+	vim.keymap.set({ "n", "x" }, "<leader>ri", function()
+		require("refactoring").refactor("Inline Variable")
+	end)
+	-- Inline var supports both normal and visual mode
+
+	vim.keymap.set("n", "<leader>rb", function()
+		require("refactoring").refactor("Extract Block")
+	end)
+	vim.keymap.set("n", "<leader>rbf", function()
+		require("refactoring").refactor("Extract Block To File")
+	end)
+	-- Extract block supports only normal mode
+
+	-- load refactoring Telescope extension
+	require("telescope").load_extension("refactoring")
+
+	vim.keymap.set({ "n", "x" }, "<leader>rr", function()
+		require("telescope").extensions.refactoring.refactors()
+	end)
+
+	use({
+		"CopilotC-Nvim/CopilotChat.nvim",
+		branch = "canary",
+		-- optional for floating window border decoration
+		requires = {
+			"zbirenbaum/copilot.lua",
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+	})
+
+	require("CopilotChat").setup({
+		debug = true, -- Enable debugging
+		-- See Configuration section for rest
+		-- Show prompts actions with telescope
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>ccp",
+			[[<cmd>lua require("CopilotChat.integrations.telescope").pick(require("CopilotChat.actions").prompt_actions())<CR>]],
+			{ noremap = true, silent = true, desc = "CopilotChat - Prompt actions" }
+		),
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>ccq",
+			"<cmd>lua CopilotChatBuffer()<cr>",
+			--CopilotChatBuffer,
+			{ noremap = true, silent = true }
+		),
+	})
+
+	-- lazygit
+	use({
+		"kdheepak/lazygit.nvim",
+		-- optional for floating window border decoration
+		requires = {
+			"nvim-lua/plenary.nvim",
+		},
+	})
+	vim.api.nvim_set_keymap("n", "gl", ":<C-u>LazyGit<CR>", { noremap = true, silent = true })
+
+	use({
+		"akinsho/toggleterm.nvim",
+		tag = "*",
+		config = function()
+			require("toggleterm").setup()
+		end,
+	})
+	vim.api.nvim_set_keymap("n", "tt", ":<C-u>ToggleTerm<CR>", { noremap = true, silent = true })
 end)

@@ -46,6 +46,10 @@ vim.g.indentLine_conceallevel = 0
 
 vim.cmd([[ colorscheme gruvbox ]])
 vim.cmd("autocmd ColorScheme * highlight LineNr ctermfg=grey")
+--vim.cmd("autocmd ColorScheme * highlight LineNr ctermfg=#0e1011")
+--vim.g.gruvbox_contrast_dark = "hard"
+--vim.cmd("highlight Normal guibg=#1d2021")
+vim.cmd("highlight Normal guibg=#0f1010")
 vim.g.vim_json_conceal = 0
 
 vim.cmd("source ~/.vim/scripts/atcoder.vim")
