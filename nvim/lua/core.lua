@@ -46,8 +46,6 @@ vim.g.indentLine_conceallevel = 0
 vim.cmd([[ colorscheme gruvbox ]])
 vim.cmd("autocmd ColorScheme * highlight LineNr ctermfg=grey")
 --vim.cmd("autocmd ColorScheme * highlight LineNr ctermfg=#0e1011")
---vim.g.gruvbox_contrast_dark = "hard"
---vim.cmd("highlight Normal guibg=#1d2021")
 vim.cmd("highlight Normal guibg=#0f1010")
 vim.g.vim_json_conceal = 0
 
@@ -55,3 +53,12 @@ vim.cmd("source ~/.vim/scripts/atcoder.vim")
 vim.g.mapleader = ","
 --vim.cmd([[ set formatoptions-=ro ]])
 vim.cmd([[ autocmd FileType * setlocal formatoptions-=cro ]])
+--vim.cmd("hi Visual guibg=#3c3836")
+--vim.cmd("hi Visual guifg=#8080e0")
+vim.cmd("highlight SignColumn guibg=#0f1010")
+vim.cmd("highlight CursorLine guibg=#203040")
+vim.cmd("highlight CursorLineNr guibg=#203040")
+--vim.cmd("highlight NormalFloat guibg=#202040")
+--vim.cmd("highlight FloatBorder guibg=#202040")
+vim.cmd("highlight RenderMarkdownCode guibg=#102028")
+vim.cmd("highlight StatusLine guibg=#203040")
