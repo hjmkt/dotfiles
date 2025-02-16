@@ -12,10 +12,8 @@ return {
 				"pylsp",
 			},
 		})
-		mason_lspconfig.setup_handlers({
-			function(server_name, bufnr)
-				require("lspconfig")[server_name].setup({})
-			end,
-		})
+		--mason_lspconfig.setup_handlers({
+		--function(server_name, bufnr) end,
+		--})
 	end,
 }

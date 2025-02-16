@@ -1,9 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
 	config = function()
-		local on_attach = function(client, bufnr)
-			client.server_capabilities.diagnostic = false -- diagnostics を無効化
-		end
 		require("lspconfig").lua_ls.setup({
 			settings = {
 				Lua = {
@@ -29,8 +26,7 @@ return {
 					},
 				},
 			},
-			on_attach = on_attach,
 		})
-		vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+		require("lspconfig").ruff.setup({})
 	end,
 }

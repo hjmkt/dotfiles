@@ -33,15 +33,15 @@ return {
 			"--config=" .. vim.env.HOME .. "/.config/.luacheckrc",
 			"-",
 		}
-		vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
-			callback = function()
-				require("lint").try_lint()
-			end,
-		})
-		vim.api.nvim_create_autocmd({ "BufEnter" }, {
-			callback = function()
-				require("lint").try_lint()
-			end,
-		})
+		--vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
+		--callback = function()
+		--require("lint").try_lint()
+		--end,
+		--})
+		--vim.api.nvim_create_autocmd({ "BufEnter" }, {
+		--callback = function()
+		--require("lint").try_lint()
+		--end,
+		--})
 	end,
 }
