@@ -28,5 +28,21 @@ return {
 			},
 		})
 		require("lspconfig").ruff.setup({})
+		require("lspconfig").pylsp.setup({
+			settings = {
+				pylsp = {
+					plugins = {
+						flake8 = {
+							config = {
+								max_line_length = 119,
+							},
+						},
+						pycodestyle = {
+							enabled = false,
+						},
+					},
+				},
+			},
+		})
 	end,
 }
